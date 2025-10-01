@@ -7,4 +7,5 @@
 1. [섹션 1, 2, 3] 개발 환경 준비 및 Spring Boot 프로젝트 생성
 2. [섹션 4] 일반 로그인 코드 작성 및 **로그인 인증 처리 클래스** 정의
 3. UserService에서 PasswordEncoder를 통해 사용자가 입력한 비밀번호를 DB에 저장할 때 암호화하여 저장하도록 하는 함수를 배움
-4. CustomUserDetails 클래스와 CustomUserDetailsService 코드를 작성함 
+4. CustomUserDetails 클래스에서 사용자 정보를 담는 클래스, 즉 로그인한 사용자 정보를 Spring Security가 이해할 수 있는 형태로 감싸주는 코드를 작성함
+5. CustomUserDetailsService에서 로그인 시 사용자 정보를 DB에서 조회하고 검증한 뒤, Spring Security가 이해할 수 있는 형태로 래핑해서 반환하는 코드를 작성함
