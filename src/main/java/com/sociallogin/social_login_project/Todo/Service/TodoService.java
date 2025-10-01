@@ -1,12 +1,11 @@
-package com.sociallogin.social_login_project.Service;
+package com.sociallogin.social_login_project.Todo.Service;
 
-import com.sociallogin.social_login_project.Entity.Todo;
-import com.sociallogin.social_login_project.Entity.User;
+import com.sociallogin.social_login_project.Todo.Service.Entity.Todo;
+import com.sociallogin.social_login_project.Todo.Service.Entity.User;
 import com.sociallogin.social_login_project.Repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor    // final 필드를 매개변수로 저장하는 생성자 (자동 생성)

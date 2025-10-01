@@ -1,6 +1,6 @@
-package com.sociallogin.social_login_project.Service;
+package com.sociallogin.social_login_project.Todo.Service;
 
-import com.sociallogin.social_login_project.Entity.User;
+import com.sociallogin.social_login_project.Todo.Service.Entity.User;
 import com.sociallogin.social_login_project.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
