@@ -1,6 +1,6 @@
 package com.sociallogin.social_login_project.Repository;
 
-import com.sociallogin.social_login_project.Entity.User;
+import com.sociallogin.social_login_project.Todo.Service.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

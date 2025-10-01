@@ -1,9 +1,8 @@
 package com.sociallogin.social_login_project.Repository;
 
-import com.sociallogin.social_login_project.Entity.Todo;
+import com.sociallogin.social_login_project.Todo.Service.Entity.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 // JpaRepository - DB 저장/조회시 사용하는 DAO 역할의 클래스

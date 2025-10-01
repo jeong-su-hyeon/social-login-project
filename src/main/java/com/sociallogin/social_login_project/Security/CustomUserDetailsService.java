@@ -1,6 +1,6 @@
 package com.sociallogin.social_login_project.Security;
 
-import com.sociallogin.social_login_project.Entity.User;
+import com.sociallogin.social_login_project.Todo.Service.Entity.User;
 import com.sociallogin.social_login_project.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
