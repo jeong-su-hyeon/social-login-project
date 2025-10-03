@@ -1,4 +1,4 @@
-package com.sociallogin.social_login_project.Todo.Service.Entity;
+package com.sociallogin.social_login_project.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

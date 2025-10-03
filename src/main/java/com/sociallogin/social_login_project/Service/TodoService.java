@@ -1,11 +1,12 @@
-package com.sociallogin.social_login_project.Todo.Service;
+package com.sociallogin.social_login_project.Service;
 
-import com.sociallogin.social_login_project.Todo.Service.Entity.Todo;
-import com.sociallogin.social_login_project.Todo.Service.Entity.User;
+import com.sociallogin.social_login_project.Entity.Todo;
+import com.sociallogin.social_login_project.Entity.User;
 import com.sociallogin.social_login_project.Repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor    // final 필드를 매개변수로 저장하는 생성자 (자동 생성)
@@ -21,7 +22,7 @@ public class TodoService {
     }
 
     // [조회] 사용자 ID로 할 일 목록을 조회
-    public Optional<Todo> getTodosByUser(User user) {
+    public List<Todo> getTodosByUserId(User user) {
         return todoRepository.findByUserId(user.getId()); // user_id 기준으로 조회
     }
 
@@ -34,8 +35,8 @@ public class TodoService {
     // 수정 & 삭제 시엔 사용자 본인만 자신의 할 일을 수정할 수 있도록 보안 처리 필수 !!
     public void updateTodo(Long id, String title, String description, User user) {
 
-        // [예외처리 1] 사용자 ID로 할 일 조회, 없으면 예외
-        Todo todo = todoRepository.findByUserId(id)
+        // [예외처리 1] 할 일 ID로 할 일 조회, 없으면 예외
+        Todo todo = todoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("할 일을 찾을 수 없습니다."));
 
         // [예외처리 2] 현재 사용자와 할 일의 사용자가 일치하지 않으면 예외
@@ -49,8 +50,8 @@ public class TodoService {
     // [삭제] 특정 ID의 할 일 삭제
     public void deleteTodoById(Long id, User user) {
 
-        // [예외처리 1] ID로 할 일 조회, 없으면 예외
-        Todo todo = todoRepository.findByUserId(id)
+        // [예외처리 1] 할 일 ID로 할 일 조회, 없으면 예외
+        Todo todo = todoRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("할 일을 찾을 수 없습니다."));
 
         // [예외처리 2] 현재 사용자와 할 일의 소유자가 일치하지 않으면 예외
