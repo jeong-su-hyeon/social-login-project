@@ -1,4 +1,4 @@
-package com.sociallogin.social_login_project.Todo.Service.Entity;
+package com.sociallogin.social_login_project.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 증가 (AUTO INCREMENT)
     private Long id;
-    private String username;
+    private String userName;
     private String password;
 
     // 1:다 관계 (사용자 <-> 할일)
