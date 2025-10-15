@@ -1,0 +1,43 @@
+body {
+    background-color: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+.main-card {
+    width: 90%;
+    max-width: 500px;
+    padding: 2.5rem;
+    border-radius: 10px;
+    text-align: center;
+}
+h3 {
+    font-weight: 300;
+    color: #0d47a1;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.btn-large {
+    text-transform: capitalize;
+    font-weight: 400;
+}
+.btn-todo {
+    background-color: #1565c0 !important;
+}
+.btn-login {
+    background-color: #00897b !important;
+}
+.btn-todo, .btn-login {
+    transition: transform 0.3s ease;
+}
+.btn-todo:hover, .btn-login:hover {
+    transform: translateY(-4px);
+}

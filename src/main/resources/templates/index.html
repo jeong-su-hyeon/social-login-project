@@ -13,25 +13,74 @@
 
     <!-- 반응형 웹 뷰포트  설정 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            background-color: #e3f2fd; /* Lighter, calming blue */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Center vertically on the page */
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .main-card {
+            width: 90%;
+            max-width: 1000px;
+            padding: 2.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        h3 {
+            font-weight: 300;
+            color: #0d47a1;
+            margin-top: 0;
+            margin-bottom: 2rem;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem; /* Space between buttons */
+        }
+        .btn-large {
+            text-transform: capitalize;
+            font-weight: 400;
+        }
+        .btn-todo {
+            width: 350px;
+            background-color: #1565c0 !important;
+        }
+        .btn-login {
+            width: 350px;
+            background-color: #00897b !important;
+        }
+        .btn-todo, .btn-login {
+            transition: transform 0.3s ease;
+        }
+        .btn-todo:hover, .btn-login:hover {
+            transform: translateY(-4px);
+        }
+    </style>
 </head>
 
 <body class="blue lighten-5"> <!-- body : 배경 연한 파랑 -->
 
 <!-- [큰 컨테이너] 페이지 가운데 정렬, 위쪽 여백 -->
-<div class="container center-align" style="margin-top: 10%;">
+<div class="card main-card z-depth-4">
     <!-- 큰 제목 -->
-    <h3 class="blue-text text-darken-2">Welcome to the TO-DO App</h3>
+    <h3>Welcome to the TO-DO App</h3>
 
     <!-- 버튼 영역 -->
-    <div class="section">
+    <div class="btn-group">
         <!-- [버튼 1] 할 일 목록 페이지로 이동 -->
-        <a href="/todos" class="btn-large waves-effect waves-light blue darken-2" style="margin: 10px;">
+        <a href="/todos" class="btn-large waves-effect waves-light btn-todo" style="margin: 10px;">
             <i class="material-icons left">list</i>View My TO-DOs <!-- [아이콘] 왼쪽에 list 아이콘 -->
         </a>
 
         <!-- [버튼 2] 로그인 페이지 이동 -->
-        <a href="/login" class="btn-large waves-effect waves-light teal darken-2" style="margin: 10px;">
-            <i class="material-icons left">login</i>4 <!-- [아이콘] 왼쪽에 로그인 아이콘 -->
+        <a href="/login" class="btn-large waves-effect waves-light btn-login" style="margin: 10px;">
+            <i class="material-icons left">login</i>Login <!-- [아이콘] 왼쪽에 로그인 아이콘 -->
         </a>
     </div>
 </div>

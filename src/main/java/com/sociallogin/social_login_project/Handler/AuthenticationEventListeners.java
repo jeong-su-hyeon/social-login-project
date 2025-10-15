@@ -18,20 +18,20 @@ public class AuthenticationEventListeners {
     // -> 인증에 대한 이벤트가 발생하면 그에 대한 관련 정보(event)가 들어오게 됨
     @EventListener
     public void handleAuthenticationEvent(AbstractAuthenticationEvent event) {
-        log.info("[이벤트 리스너 - 로그인 인증] handleAuthenticationEvent\n" + event);
+        log.info("\n[이벤트 리스너 - 로그인 인증 시도] handleAuthenticationEvent\n->" + event);
     }
 
     // [로그인 실패 이벤트]
     // ex. 실패 로그, 실패 횟수 증가, 일정 횟수 이상 실패 시 계정 잠금 처리 등
     @EventListener
     public void handleBadCredentials(AuthenticationFailureBadCredentialsEvent event) {
-        log.info("[이벤트 리스너 - 로그인 실패] handleBadCredentials\n" + event);
+        log.info("\n[이벤트 리스너 - 로그인 실패] handleBadCredentials\n->" + event);
     }
 
     // [로그인 성공 이벤트]
     // ex. 마지막 로그인 시간 기록, 성공적으로 로그인한 사용자에게 알림, 로그인 시도 횟수 초기화
     @EventListener
     public void handleAuthenticationSuccess(AuthenticationSuccessEvent event) {
-        log.info("[이벤트 리스너 - 로그인 성공] handleAuthenticationSuccess\n" + event);
+        log.info("\n[이벤트 리스너 - 로그인 성공] handleAuthenticationSuccess\n->" + event);
     }
 }

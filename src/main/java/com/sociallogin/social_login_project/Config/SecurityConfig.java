@@ -1,7 +1,7 @@
 package com.sociallogin.social_login_project.Config;
 
-import com.sociallogin.social_login_project.Handler.CustomLoginFailureHandler;
-import com.sociallogin.social_login_project.Handler.CustomLoginSuccessHandler;
+import com.sociallogin.social_login_project.Handler.LoginFailureHandler;
+import com.sociallogin.social_login_project.Handler.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,19 +30,35 @@ public class SecurityConfig {
 
     // [보안 설정 핵심 구성 요소]
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationFailureHandler authenticationFailureHandler) throws Exception {
         http
 
         // 1) URL 별 접근 권한 설정
         .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/users/register", "/login", "/css/**", "/js/**").permitAll() // 누구나 접근 가능
-                .anyRequest().authenticated()       // 그 외의 요청은 인증 필요
+                // 누구나 접근 가능
+                .requestMatchers("/css/**", "/js/**").permitAll()
+
+                // Swagger UI 및 API 문서 경로 허용
+                .requestMatchers(
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml").permitAll()
+
+                // 홈페이지, 로그인, 회원가입 페이지 허용
+                .requestMatchers("/", "/users/register", "/login").permitAll()
+
+                // 그 외의 요청은 인증 필요
+                .requestMatchers("/todos").authenticated()
+                .anyRequest().authenticated()
         )
         // 2) 로그인 설정
         .formLogin(form -> form
                 .loginPage("/login")                // 로그인 페이지 경로
                 .permitAll()                        // 로그인은 인증 없이 접근 가능
                 .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
+                .successHandler(authenticationSuccessHandler())     // 로그인 성공 시 핸들러
+                .failureHandler(authenticationFailureHandler())     // 로그인 실패 시 핸들러
         )
         // 3) 로그아웃 설정
         .logout(logout -> logout
@@ -57,13 +73,13 @@ public class SecurityConfig {
     // [핸들러 등록]
     // 1) 로그인 성공 시
     @Bean
-    AuthenticationSuccessHandler authenticationSuccessHadnler() {
-        return new CustomLoginSuccessHandler();
+    AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new LoginSuccessHandler();
     }
 
     // 2) 로그인 실패 시
     @Bean
-    AuthenticationFailureHandler authenticationFailureHadnler() {
-        return new CustomLoginFailureHandler();
+    AuthenticationFailureHandler authenticationFailureHandler() {
+        return new LoginFailureHandler();
     }
 }

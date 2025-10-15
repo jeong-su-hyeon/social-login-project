@@ -43,7 +43,7 @@ public class UserController {
         String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";  // 이메일 정규 표현식
         if (!Pattern.matches(emailPattern, user.getEmail())) { // 이메일이 정규식과 일치 X
             result.rejectValue("email", "error.user", "유효하지 않은 이메일 형식입니다. 유효한 이메일 주소를 입력해주세요."); // BindingResult 에 에러 등록
-            model.addAttribute("emailError", "유효하지 않은 이메일 형식입니다. 유효한 이메일 주소를 입력해주세요."); // 뷰에 표시할 에러 메시지
+            model.addAttribute("emailError", "유효하지 않은 이메일 형식입니다.\n유효한 이메일 주소를 입력해주세요."); // 뷰에 표시할 에러 메시지
         }
 
         // 2 [폼 데이터 매핑 오류 등 (ex. 숫자 필드에 문자 입력 등)]

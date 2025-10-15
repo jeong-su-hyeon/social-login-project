@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import java.io.IOException;
 
 @Slf4j
-public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     // 로그인 성공 시 동작하는 Spring Security의 커스텀 로그인 성공 핸들러
     // 역할 1) Spring Security에서 로그인 성공 시 호출되는 콜백 구현
