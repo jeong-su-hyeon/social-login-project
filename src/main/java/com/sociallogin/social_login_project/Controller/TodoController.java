@@ -2,7 +2,7 @@ package com.sociallogin.social_login_project.Controller;
 
 import com.sociallogin.social_login_project.Entity.Todo;
 import com.sociallogin.social_login_project.Entity.User;
-import com.sociallogin.social_login_project.Security.CustomUserDetails;
+import com.sociallogin.social_login_project.Security.UserPrincipal;
 import com.sociallogin.social_login_project.Service.TodoService;
 import com.sociallogin.social_login_project.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +36,10 @@ public class TodoController {
             return "redirect:/login";   // 로그인 페이지로 리다이렉트
 
         // (인증 정보 O)
-        CustomUserDetails customUserDetails = (CustomUserDetails) principal;                // 사용자 정보를 커스텀 객체로 캐스팅
+        UserPrincipal userPrincipal = (UserPrincipal) principal;   // 사용자 정보를 커스텀 객체로 캐스팅
 
         // 2 [사용자 정보를 DB 에서 조회]
-        Optional<User> user = userService.findByUsername(customUserDetails.getUsername());
+        Optional<User> user = userService.findByEmail(userPrincipal.getUsername());
 
         // (사용자 정보 X)
         if(user.isEmpty())              // 사용자 정보가 없으면
@@ -64,11 +64,11 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if(principal == null)
             return "redirect:/login";
-        CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+        UserPrincipal userPrincipal = (UserPrincipal) principal;
 
         // 2 [사용자의 할 일 추가]
         User user = new User();
-        user.setId(customUserDetails.getUserId());  // 현재 로그인한 사용자 ID
+        user.setId(userPrincipal.getId());  // 현재 로그인한 사용자 ID
         todoService.addTodo(todo, user);            // 추가
 
         // 3 [할 일 목록으로 리다이렉트]
@@ -82,11 +82,11 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if (principal == null)
             return "redirect:/login";
-        CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+        UserPrincipal userPrincipal = (UserPrincipal) principal;
 
         // 2 [사용자의 할 일 목록 삭제]
         User user = new User();
-        user.setId(customUserDetails.getUserId());  // 현재 사용자 ID
+        user.setId(userPrincipal.getId());  // 현재 사용자 ID
         todoService.deleteTodoById(id, user);       // 삭제
 
         return "redirect:/todos";
@@ -99,10 +99,10 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if(principal == null)
             return "redirect:/login";
-        CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+        UserPrincipal userPrincipal = (UserPrincipal) principal;
 
         // 2 [현재 사용자 할 일 조회]
-        Long userId = customUserDetails.getUserId(); // 현재 사용자 ID
+        Long userId = userPrincipal.getId(); // 현재 사용자 ID
         Optional<Todo> todoOptional = todoService.getTodoById(id); // 해당 사용자의 할 일 조회
 
         // 3 [해당 할 일이 사용자 소유인지 확인]
@@ -127,11 +127,11 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if (principal == null)
             return "redirect:/login";
-        CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+        UserPrincipal userPrincipal = (UserPrincipal) principal;
 
         // 2 [사용자의 할 일 수정]
         User user = new User();
-        user.setId(customUserDetails.getUserId()); // 현재 사용자 ID
+        user.setId(userPrincipal.getId()); // 현재 사용자 ID
         todoService.updateTodo(id, title,description, user);
 
         return "redirect:/todos";

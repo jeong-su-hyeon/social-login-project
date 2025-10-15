@@ -24,6 +24,5 @@ public class HomeController {
     public String logout() {
         return "redirect:/login?logout";    // 로그아웃 후 "/login?logout" 경로로 리다이렉트
                                             // ? : 로그아웃이 성공적으로 완료되었다는 의미
-                                            // 3:19초
     }
 }
