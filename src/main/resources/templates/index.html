@@ -1,0 +1,40 @@
+<!-- 메인 화면 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">  <!-- 인코딩 설정 -->
+    <title>Home</title>     <!-- 탭 제목 -->
+
+    <!-- Materialize CSS CDN 스타일 시트 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <!-- 구글 Material Icons 아이콘 폰트 -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- 반응형 웹 뷰포트  설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="blue lighten-5"> <!-- body : 배경 연한 파랑 -->
+
+<!-- [큰 컨테이너] 페이지 가운데 정렬, 위쪽 여백 -->
+<div class="container center-align" style="margin-top: 10%;">
+    <!-- 큰 제목 -->
+    <h3 class="blue-text text-darken-2">Welcome to the TO-DO App</h3>
+
+    <!-- 버튼 영역 -->
+    <div class="section">
+        <!-- [버튼 1] 할 일 목록 페이지로 이동 -->
+        <a href="/todos" class="btn-large waves-effect waves-light blue darken-2" style="margin: 10px;">
+            <i class="material-icons left">list</i>View My TO-DOs <!-- [아이콘] 왼쪽에 list 아이콘 -->
+        </a>
+
+        <!-- [버튼 2] 로그인 페이지 이동 -->
+        <a href="/login" class="btn-large waves-effect waves-light teal darken-2" style="margin: 10px;">
+            <i class="material-icons left">login</i>4 <!-- [아이콘] 왼쪽에 로그인 아이콘 -->
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!-- 회원가입 창 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>     <!-- 탭 제목 -->
+
+    <!-- Materialize CSS 프레임워크 링크 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Material JavaScript 라이브러리 (버튼 효과 등 상호작용 용도) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f6f9; /* 옅은 회색 배경색 */
+            font-family: 'Roboto', sans-serif; /* 구글 폰트 추가 */
+        }
+    </style>
+
+    <style>
+        .container {
+            width: 450px; /* 컨테이너 너비를 약간 줄여서 좁고 긴 느낌으로 */
+            padding: 40px; /* 내부 여백을 더 넓게 */
+            border-radius: 12px; /* 모서리를 부드럽게 */
+            background-color: #ffffff; /* 흰색 배경 */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* 더 부드럽고 넓은 그림자 */
+        }
+    </style>
+
+    <style>
+        /* 입력 필드에 부드러운 전환 효과 추가 */
+        .input-field input[type=text],
+        .input-field input[type=password] {
+            border-bottom: 2px solid #e0e0e0 !important;
+            box-shadow: none !important;
+        }
+        .input-field input[type=text]:focus,
+        .input-field input[type=password]:focus {
+            border-bottom: 2px solid #2196f3 !important; /* 포커스 시 파란색으로 */
+        }
+
+        /* 버튼에 부드러운 전환 효과 추가 */
+        .btn {
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #1e88e5 !important; /* 호버 시 약간 더 진한 파란색 */
+        }
+
+        /* 오류 메시지 스타일 */
+        .card-panel.red {
+            border-radius: 8px; /* 메시지 박스 모서리 둥글게 */
+            box-shadow: none;
+            padding: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- [큰 컨테이너] 페이지 가운데 정렬 -->
+<div class="container card z-depth-3">
+    <!-- 큰 제목 -->
+    <h4 class="center-align">Register</h4>
+
+    <!-- [메시지 박스] 이메일 형식 오류 -->
+    <div th:if="${emailError}" class="card-panel red lighten-2 white-text center-align">
+        <p th:text="${emailError}"></p> <!-- 서버 오류 메시지 출력 -->
+    </div>
+
+    <!-- [메시지 박스] 중복된 이메일 -->
+    <div th:if="${duplicatedError}" class="card-panel red lighten-2 white-text center-align">
+        <p th:text="${duplicatedError}"></p> <!-- 서버 오류 메시지 출력 -->
+    </div>
+
+    <!-- [메시지 박스] 일반 오류 -->
+    <div th:if="${error}" class="card-panel red lighten-2 white-text center-align">
+        <p th:text="${error}"></p> <!-- 서버 오류 메시지 출력 -->
+    </div>
+
+    <!-- 회원가입 폼 시작 (POST 메서드) --> <!-- 19강 8:18 -->
+    <form method="post" th:action="@{/users/register}" class="row">
+        <!-- [영역 1] 이메일 입력 필드 -->
+        <div class="input-field col s12">
+            <!-- [텍스트 박스] 사용자 이름 입력 (필수) -->
+            <input type="text" name="email" id="email" required>
+            <!-- [라벨] 입력 필드 라벨 -->
+            <label for="email">Email</label>
+        </div>
+
+        <!-- [영역 2] 비밀번호 입력 -->
+        <div class="input-field col s12">
+            <!-- [텍스트 박스] 사용자 비밀번호 입력 (필수) -->
+            <input type="password" name="password" id="password" required>
+            <!-- [라벨] 입력 필드 라벨 -->
+            <label for="password">Password</label>
+        </div>
+
+        <!-- [영역 3] 제출 버튼 -->
+        <div class="input-field col s12">
+            <!-- [버튼] 파란색 로그인 버튼 -->
+            <button type="submit" class="btn waves-effect waves-light blue">Register</button>
+        </div>
+
+        <!-- [영역 4] 로그인 페이지 이동 링크-->
+        <p class="center-align">
+            <a href="/login" class="blue-text">Already have an account?</a>
+        </p>
+    </form>
+</div>
+
+</body>
+</html>

@@ -35,31 +35,31 @@ public class UserController {
     // @ModelAttribute : HTML 폼을 통해 서버로 전송된 데이터를 객체에 자동으로 담아줌
     @PostMapping("/register")
     public String registerUser(
-            @ModelAttribute("user") User user,
-            BindingResult result,
-            Model model
+            @ModelAttribute("user") User user,  // 폼에서 전달된 사용자 객체 바인딩
+            BindingResult result,               // 유효성 검사 결과 객체
+            Model model                         // 뷰로 전달할 데이터 객체
     ) {
         //  1 [이메일 유효성 검사]
         String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";  // 이메일 정규 표현식
-        if (!Pattern.matches(emailPattern, user.getUserName())) { // 이메일이 정규식과 일치 X
-            result.rejectValue("userName", "error.user", "유효하지 않은 이메일 형식입니다. 유효한 이메일 주소를 입력해주세요."); // BindingResult 에 에러 등록
+        if (!Pattern.matches(emailPattern, user.getEmail())) { // 이메일이 정규식과 일치 X
+            result.rejectValue("email", "error.user", "유효하지 않은 이메일 형식입니다. 유효한 이메일 주소를 입력해주세요."); // BindingResult 에 에러 등록
             model.addAttribute("emailError", "유효하지 않은 이메일 형식입니다. 유효한 이메일 주소를 입력해주세요."); // 뷰에 표시할 에러 메시지
         }
 
-        // 2 [중복된 사용자 확인]
-        if(result.hasErrors()) { // 중복 사용자라면
+        // 2 [폼 데이터 매핑 오류 등 (ex. 숫자 필드에 문자 입력 등)]
+        if(result.hasErrors()) {
             return "register"; // 다시 등록 페이지로 이동
         }
 
         // 3 [중복되는 이메일 명 확인]
-        if(userService.findByUsername(user.getUserName()).isPresent()) { // 중복되는 이메일이라면
+        if(userService.findByEmail(user.getEmail()).isPresent()) { // 중복되는 이메일이라면
             model.addAttribute("duplicatedError", "이미 존재하는 사용자 이름입니다."); // 에러 등록
             return "register";
         }
 
-        // 4 [사용자 등록]
-        userService.registerUser(user.getUserName(), user.getPassword());
+        // 4 [모든 검사 통과 -> 사용자 등록]
+        userService.registerUser(user.getEmail(), user.getPassword());
 
-        return "register:/login";
+        return "redirect:/login"; // 회원 가입 성공 후, 로그인 페이지로 이동
     }
 }

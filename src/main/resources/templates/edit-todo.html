@@ -1,0 +1,49 @@
+<!-- 1) 기존 할 일 정보를 입력 폼에 미리 보여줌
+     2) 사용자가 수정한 내용을 서버에 POST로 제출
+     3) DB 업데이트 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit TO-DO</title>     <!-- 탭 제목 -->
+
+    <!-- Materialize CSS 프레임워크 링크 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <!-- Material JavaScript 라이브러리 (버튼 효과 등 상호작용 용도) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+
+<body>
+
+<!-- [큰 컨테이너] -->
+<div class="section">
+    <!-- 큰 제목 -->
+    <h4 class="center-align">Edit TO-DO</h4>
+
+    <!-- [폼] 할 일 수정 -->
+    <form method="post" th:action="@{`/todos/update/' + ${todo.id}}" class="row">
+
+        <!-- [입력 1] 제목 입력 필드 (필수) -->
+        <div class="input-field col s12">
+            <input type="text" name="title" id="title" th:value="${todo.title}" required> <!-- 기존 제목으로 기본값으로 설정 -->
+            <label for="title">Title</label>
+        </div>
+
+        <!-- [입력 2] 설명 입력 필드 -->
+        <div class="input-field col s12">
+            <input type="text" name="description" id="description" th:value="${todo.description}"> <!-- 기존 설명으로 기본값으로 설정 -->
+            <label for="description">Description</label>
+        </div>
+
+        <!-- [버튼] 업데이트 & 취소 -->
+        <div class="col s12 center-align">
+            <button type="submit" class="btn waves-effect waves-light blue">Update</button>
+            <a href="/todos" class="btn waves-effect waves-light grey">Cancel</a>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

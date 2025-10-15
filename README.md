@@ -19,3 +19,9 @@
 
 ### 10월 3일
 1. [섹션 4] 로그인, 로그아웃 등을 처리하는 `HomeController`, 할 일을 관리하는 `TodoController`, 사용자 등록, 로그인을 처리하는 `UserController`를 구현함
+
+### 10월 14일
+1. [섹션 4 19강] resources/templates/ 경로에 시작(`index.html`) / 로그인(`login.html`) / 회원가입(`register.html`) / 할 일 CRUD(`todos.html`) / 할 일 수정(`edit-todo.html`) 페이지 작성 함
+
+### 10월 15일
+1. [섹션 4 20강] inde

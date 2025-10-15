@@ -9,11 +9,11 @@ import java.util.Collection;
 @RequiredArgsConstructor
 // Spring Security에서 사용자 정보를 담는 커스텀 UserDetails 클래스
 // 로그인한 사용자 정보를 Spring Security가 이해할 수 있는 형태로 감싸주는 중간 다리 역할
-public class CustomUserDetails implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
     private static final long serialVersionUID = 1L; // 직렬화를 위한 고유 식별자 (예: 세션 저장 or 캐싱 기능)
-    private final Long userId;
-    private final String userName;
+    private final Long id;
+    private final String email;
     private final String password;
 
     // [ 사용자 권한 목록 관련 ]
@@ -33,8 +33,8 @@ public class CustomUserDetails implements UserDetails {
 
     // [Get] 사용자 이름 반환
     @Override
-    public String getUsername() { return userName; }
+    public String getUsername() { return email; }
 
     // [Get] 사용자 ID 반환 (Custom)
-    public Long getUserId() { return userId; }
+    public Long getId() { return id; }
 }
