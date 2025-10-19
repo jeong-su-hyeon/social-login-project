@@ -19,7 +19,7 @@ public class UserPrincipal implements UserDetails {
     // [ 사용자 권한 목록 관련 ]
     // Spring Security가 인가 처리할 때 핵심적으로 사용함
     private final Collection<? extends GrantedAuthority> authorities;
-    // ex) 사용자 - ROLL_USER, 관리자 - ROLL ADMIN 이런식으로 저장 됨
+    // ex) 사용자 - ROLL_USER, 관리자 - ROLL_ADMIN 이런식으로 저장 됨
 
     // [ CustomUserDetails 클래스에서 반드시 구현 ] (@Override)
     // [Get] 사용자 권한 정보 반환

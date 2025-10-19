@@ -1,11 +1,13 @@
 package com.sociallogin.social_login_project.Controller;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@Slf4j
 public class HomeController {
 
     // Spring MVC 기반 컨트롤러
@@ -13,11 +15,13 @@ public class HomeController {
     // @GetMapping : GET 요청 처리
     @GetMapping("/")
     public String home() {
+        log.info("\n[HomeController] 메인 페이지 접속");
         return "index";  // "index"이라는 이름의 뷰(템플릿)를 반환 (resources/templates/index.html 을 찾아 출력)
     }
 
     @GetMapping("/login")
     public String login() {
+        log.info("\n[HomeController] 로그인 페이지 접속");
         return "login";
     }
 

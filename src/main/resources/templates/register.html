@@ -79,12 +79,17 @@
         <p th:text="${duplicatedError}"></p> <!-- 서버 오류 메시지 출력 -->
     </div>
 
+    <!-- [메시지 박스] 비밀번호 자릿수 -->
+    <div th:if="${passwordError}" class="card-panel red lighten-2 white-text center-align">
+        <p th:text="${passwordError}"></p> <!-- 서버 오류 메시지 출력 -->
+    </div>
+
     <!-- [메시지 박스] 일반 오류 -->
     <div th:if="${error}" class="card-panel red lighten-2 white-text center-align">
         <p th:text="${error}"></p> <!-- 서버 오류 메시지 출력 -->
     </div>
 
-    <!-- 회원가입 폼 시작 (POST 메서드) --> <!-- 19강 8:18 -->
+    <!-- 회원가입 폼 시작 (POST 메서드) -->
     <form method="post" th:action="@{/users/register}" class="row">
         <!-- [영역 1] 이메일 입력 필드 -->
         <div class="input-field col s12">

@@ -34,7 +34,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 
         // 1 [로그인 실패 예외 로그]
         // 실패 원인을 로그로 남긴다.
-        log.info("\n[핸들러 - 로그인 실패 원인] onAuthenticationFailure Exception\n-> " + exception);
+        log.info("\n[로그인 실패 핸들러 - 실패 원인] onAuthenticationFailure Exception\n-> " + exception);
 
         // 사용자가 접근하려던 요청 정보 가져오기
         SavedRequest savedRequest = requestCache.getRequest(request, response);
@@ -45,7 +45,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             String targetUrl = savedRequest.getRedirectUrl();
 
             // 2-2 실패 시 사용자가 접근하려던 URL 로그 출력
-            log.info("\n[핸들러 - 사용자가 접근 시도한 URL]\n->" + targetUrl);
+            log.info("\n[로그인 실패 핸들러 - 사용자가 접근 시도한 URL]\n->" + targetUrl);
 
             // 2-3 targetUrl로 리다이렉트
             // -> 로그인에 실패했지만 사용자를 원래 있던 페이지로 보내줌

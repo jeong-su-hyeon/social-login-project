@@ -26,10 +26,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     ) throws IOException, ServletException {
 
         // 1 [로그인 성공 로그]
-        log.info("[핸들러 - 로그인 성공");         // 디버깅용 or 보안 모니터링용
+        log.info("\n[로그인 성공 핸들러]");         // 디버깅용 or 보안 모니터링용
 
         // 로그인 성공 후 이동할 기본 URL
-        String targetUrl = "/";                 // 자유롭게 변경
+        String targetUrl = "/todos";                 // 자유롭게 변경
 
         // 2 [해당 URL로 리다이렉트]
         response.sendRedirect(targetUrl);
