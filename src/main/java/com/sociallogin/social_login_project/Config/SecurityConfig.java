@@ -30,7 +30,10 @@ public class SecurityConfig {
 
     // [보안 설정 핵심 구성 요소]
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationFailureHandler authenticationFailureHandler) throws Exception {
+    SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            AuthenticationSuccessHandler authenticationSuccessHandler,
+            AuthenticationFailureHandler authenticationFailureHandler) throws Exception {
         http
 
         // 1) URL 별 접근 권한 설정
@@ -48,17 +51,22 @@ public class SecurityConfig {
                 // 홈페이지, 로그인, 회원가입 페이지 허용
                 .requestMatchers("/", "/users/register", "/login").permitAll()
 
+                // 파비콘 허용
+                .requestMatchers("/favicon.ico").permitAll()
+
                 // 그 외의 요청은 인증 필요
                 .requestMatchers("/todos").authenticated()
                 .anyRequest().authenticated()
+
+
         )
         // 2) 로그인 설정
         .formLogin(form -> form
                 .loginPage("/login")                // 로그인 페이지 경로
                 .permitAll()                        // 로그인은 인증 없이 접근 가능
                 .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
-                .successHandler(authenticationSuccessHandler())     // 로그인 성공 시 핸들러
-                .failureHandler(authenticationFailureHandler())     // 로그인 실패 시 핸들러
+                .successHandler(authenticationSuccessHandler)     // 로그인 성공 시 핸들러
+                .failureHandler(authenticationFailureHandler)     // 로그인 실패 시 핸들러
         )
         // 3) 로그아웃 설정
         .logout(logout -> logout

@@ -6,6 +6,8 @@ import com.sociallogin.social_login_project.Security.UserPrincipal;
 import com.sociallogin.social_login_project.Service.TodoService;
 import com.sociallogin.social_login_project.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/todos/") // 엔드포인트의 맨 앞 고정 경로
 @RequiredArgsConstructor
+@Slf4j
 public class TodoController {
 
     // 사용자의 할 일 조회, 추가, 수정, 삭제 기능 처리
@@ -32,8 +35,10 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
 
         // (인증 정보 X)
-        if(principal == null)           // 인증 정보가 없으면
+        if(principal == null) {
+            log.info("[ TodoController - getTodos ]\n사용자 인증정보가 존재하지 않습니다. 로그인 페이지로 리다이렉트 합니다.");
             return "redirect:/login";   // 로그인 페이지로 리다이렉트
+        }
 
         // (인증 정보 O)
         UserPrincipal userPrincipal = (UserPrincipal) principal;   // 사용자 정보를 커스텀 객체로 캐스팅
@@ -42,8 +47,11 @@ public class TodoController {
         Optional<User> user = userService.findByEmail(userPrincipal.getUsername());
 
         // (사용자 정보 X)
-        if(user.isEmpty())              // 사용자 정보가 없으면
+        if(user.isEmpty()) {
+            log.info("[ TodoController - getTodos ]\nDB에 사용자 정보가 존재하지 않습니다. 로그인 페이지로 리다이렉트 합니다.");
             return "redirect:/login";   // 로그인 페이지로 리다이렉트
+        }
+
 
         // (사용자 정보 O)
         // 3 [해당 사용자에 대한 할 일 목록 조회]

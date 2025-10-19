@@ -3,6 +3,7 @@ package com.sociallogin.social_login_project.Controller;
 import com.sociallogin.social_login_project.Entity.User;
 import com.sociallogin.social_login_project.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
 
     // 사용자의 회원가입, 로그인 처리
@@ -23,9 +25,10 @@ public class UserController {
 
     private final UserService userService;
 
-    // [조회] 회원 가입 폼 보기
+    // [조회] 회원가입 폼 보기
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
+        log.info("\n[UserController] 회원가입 페이지 접속");
         // 새 User 객체를 모데렝 추가해 폼에서 바인딩하도록
         model.addAttribute("user", new User());
         return "register"; // "register.html" 반환
@@ -44,6 +47,7 @@ public class UserController {
         if (!Pattern.matches(emailPattern, user.getEmail())) { // 이메일이 정규식과 일치 X
             result.rejectValue("email", "error.user", "유효하지 않은 이메일 형식입니다. 유효한 이메일 주소를 입력해주세요."); // BindingResult 에 에러 등록
             model.addAttribute("emailError", "유효하지 않은 이메일 형식입니다.\n유효한 이메일 주소를 입력해주세요."); // 뷰에 표시할 에러 메시지
+            return "register";
         }
 
         // 2 [폼 데이터 매핑 오류 등 (ex. 숫자 필드에 문자 입력 등)]
@@ -57,8 +61,18 @@ public class UserController {
             return "register";
         }
 
+        // 4 [비밀번호 유효성 검사]
+        String password = user.getPassword();
+        if (password.length() < 8) {
+            result.rejectValue("password", "error.user", "비밀번호는 최소 8자리 이상이어야합니다.");
+            model.addAttribute("passwordError", "비밀번호는 최소 8자리 이상이어야합니다.");
+            return "register";
+        }
+
         // 4 [모든 검사 통과 -> 사용자 등록]
         userService.registerUser(user.getEmail(), user.getPassword());
+        log.info("\n[UserController] 회원가입 성공! 로그인 페이지로 이동합니다.\n- 사용자 입력 메일, 패스워드 : ${}, {}",
+                user.getEmail(), user.getPassword());
 
         return "redirect:/login"; // 회원 가입 성공 후, 로그인 페이지로 이동
     }
