@@ -21,7 +21,7 @@
     <h4 class="center-align">Edit TO-DO</h4>
 
     <!-- [폼] 할 일 수정 -->
-    <form method="post" th:action="@{`/todos/update/' + ${todo.id}}" class="row">
+    <form method="post" th:action="@{'/todos/update/' + ${todo.id}}" class="row">
 
         <!-- [입력 1] 제목 입력 필드 (필수) -->
         <div class="input-field col s12">

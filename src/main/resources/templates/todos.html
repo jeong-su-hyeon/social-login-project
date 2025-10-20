@@ -16,7 +16,7 @@
             M.textareaAutoResize(titleInput);       // 제목 필드 높이 자동 설정
             M.textareaAutoResize(descriptionInput); // 설명 필드 높이 자동 설정
 
-        }
+        })
     </script>
 
     <!-- [CSS] 사용자 정의 스타일 -->
@@ -71,7 +71,7 @@
     <!-- [영역 3] 할 일 목록 존재할 경우 -->
     <div th:if="${todos != null and not #lists.isEmpty(todos)}">
         <ul class="collection">
-            <li class="collection-item todo-item" th:each="todo : ${todos}}">
+            <li class="collection-item todo-item" th:each="todo : ${todos}">
                 <div>
                     <strong th:text="${todo.title}"></strong>
                     <p th:text="@{todo.description}"></p>
