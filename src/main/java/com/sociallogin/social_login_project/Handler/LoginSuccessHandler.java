@@ -29,7 +29,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("\n[로그인 성공 핸들러]");         // 디버깅용 or 보안 모니터링용
 
         // 로그인 성공 후 이동할 기본 URL
-        String targetUrl = "/todos";                 // 자유롭게 변경
+        String targetUrl = "/todos";             // 자유롭게 변경
 
         // 2 [해당 URL로 리다이렉트]
         response.sendRedirect(targetUrl);

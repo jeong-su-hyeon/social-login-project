@@ -45,6 +45,8 @@ public class TodoService {
 
         // 검증 통과 => 수정
         todo.setTitle(title);
+        todo.setDescription(description);
+        todoRepository.save(todo);
     }
 
     // [삭제] 특정 ID의 할 일 삭제
