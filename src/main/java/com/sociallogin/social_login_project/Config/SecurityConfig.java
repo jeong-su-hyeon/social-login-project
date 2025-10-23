@@ -2,21 +2,29 @@ package com.sociallogin.social_login_project.Config;
 
 import com.sociallogin.social_login_project.Handler.LoginFailureHandler;
 import com.sociallogin.social_login_project.Handler.LoginSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-@Configuration      // Spring의 환경 구성 요소로 인식 (.xml 이런거...)
-@EnableWebSecurity  // Spring Security 웹 보안 활성화
+@RequiredArgsConstructor    // final로 선언된 필드에 대해 자동으로 생성자를 만들어줌
+@Configuration              // Spring 설정 클래스
+@EnableWebSecurity          // Spring Security 웹 보안 활성화
+// < Spring Security 설정 담당 >
+// (인증, 인가, JWT 필터, OAuth 설정 등)
 public class SecurityConfig {
 
-    // Spring Security 설정 담당 (인증, 인가, JWT 필터, OAuth 설정 등)
+    // [소셜 로그인 처리 서비스]
+    // 소셜 로그인 시, 이 서비스가 호출되어 사용자 이메일을 읽음
+    // DB에 등록하거나 기존 회원을 불러오는 역할
+    private final OAuth2UserService customOAuth2UserService;
 
     // [비밀번호 암호화 처리]
     @Bean        //
@@ -61,13 +69,23 @@ public class SecurityConfig {
 
         )
         // 2) 로그인 설정
-        .formLogin(form -> form
-                .loginPage("/login")                // 로그인 페이지 경로
-                .permitAll()                        // 로그인은 인증 없이 접근 가능
-                .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
-                .successHandler(authenticationSuccessHandler)     // 로그인 성공 시 핸들러
-                .failureHandler(authenticationFailureHandler)     // 로그인 실패 시 핸들러
+//        .formLogin(form -> form
+//                .loginPage("/login")                // 로그인 페이지 경로
+//                .permitAll()                        // 로그인은 인증 없이 접근 가능
+//                .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
+//                .successHandler(authenticationSuccessHandler)     // 로그인 성공 시 핸들러
+//                .failureHandler(authenticationFailureHandler)     // 로그인 실패 시 핸들러
+//                //.userInfoEndPoint(userInfo -> userInfo.userService(customOAuth2UserService)
+//        )
+        // 2) OAuth2 로그인 설정
+        .oauth2Login(oauth2 -> oauth2
+            .loginPage("/login")
+            .successHandler(authenticationSuccessHandler)
+            .failureHandler(authenticationFailureHandler)
+            .userInfoEndpoint(userInfo -> userInfo
+                    .userService(customOAuth2UserService))
         )
+
         // 3) 로그아웃 설정
         .logout(logout -> logout
                 .logoutUrl("/logout")               // 로그아웃 페이지 경로
@@ -79,6 +97,10 @@ public class SecurityConfig {
     }
 
     // [핸들러 등록]
+    // 핸들러를 따로 설정하는 이유
+    // ex 로그인 성공 시 사용자 이름을 남기기, 마지막 로그인 시간 저장, 특정 페이지로 동적 이동할 수 있음
+    // 로그인 실패 시, 실패 사유를 사용자에게 알려주거나, 로그인 실패 횟수를 누적해서 보안 조치를 취할 수도 있음
+    // -> 이러한 커스터마이징을 핸들러를 통해 할 수 있음
     // 1) 로그인 성공 시
     @Bean
     AuthenticationSuccessHandler authenticationSuccessHandler() {

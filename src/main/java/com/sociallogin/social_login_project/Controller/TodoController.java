@@ -20,10 +20,10 @@ import java.util.Optional;
 @RequestMapping("/todos") // 엔드포인트의 맨 앞 고정 경로
 @RequiredArgsConstructor
 @Slf4j
+// < 사용자의 할 일 CRUD 기능 처리 >
 public class TodoController {
 
-    // 사용자의 할 일 CRUD 기능 처리
-
+    // [서비스] TODO, user
     private final TodoService todoService;
     private final UserService userService;
 

@@ -22,6 +22,12 @@ public class User {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
+    @Column(name = "social_type")   // 소셜 로그인 유형 (Goolge, Naver ...)
+    private String socialType;
+
+    @Column(name = "social_id")     // 소셜 로그인 ID (외부에서 제공 받은 사용자 식별자)
+    private String socialId;
+
     // 1:다 관계 (사용자 <-> 할일)
     // Todo 엔티티의 user 필드를 기준으로 관계 설정
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
