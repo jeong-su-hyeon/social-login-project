@@ -75,7 +75,6 @@ public class SecurityConfig {
 //                .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
 //                .successHandler(authenticationSuccessHandler)     // 로그인 성공 시 핸들러
 //                .failureHandler(authenticationFailureHandler)     // 로그인 실패 시 핸들러
-//                //.userInfoEndPoint(userInfo -> userInfo.userService(customOAuth2UserService)
 //        )
         // 2) OAuth2 로그인 설정
         .oauth2Login(oauth2 -> oauth2

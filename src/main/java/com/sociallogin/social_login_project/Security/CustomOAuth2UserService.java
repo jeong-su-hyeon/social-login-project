@@ -60,7 +60,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 registrationId = " + registrationId);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 userNameAttributeName = " + registrationId);
+        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 userNameAttributeName = " + userNameAttributeName);
 
 
         // 3 [사용자 정보 매핑] OAuthAttributes 객체로 사용자 정보 매핑
