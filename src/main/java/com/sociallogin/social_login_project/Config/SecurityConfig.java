@@ -65,8 +65,6 @@ public class SecurityConfig {
                 // 그 외의 요청은 인증 필요
                 .requestMatchers("/todos").authenticated()
                 .anyRequest().authenticated()
-
-
         )
         // 2) 로그인 설정
 //        .formLogin(form -> form

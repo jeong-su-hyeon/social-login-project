@@ -38,13 +38,14 @@ public class OAuthAttributes {
     // 현재는 Google만 처리하며, 추후 다른 플랫폼에 따라 분기 가능
     // OAuthAttributes 객체를 생성하는 정적 팩토리 메서드
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
-        return ofGoogle(userNameAttributeName, attributes); // Google 로그인 처리
+        //return ofGoogle(userNameAttributeName, attributes); // Google 로그인 처리
+        return ofNaver("id", attributes);
     }
 
     // [메서드]
     // Google 로그인 전용 사용자 정보 매핑 메서드
     // -> Google에서 받은 Map<> 에서 추출된 정보를 담음
-    // -> Map에서 받은 정보들을 key를 이용해 필요한 값들을 하난씩 추출 -> String 타입으로 저장 (멤버필드 변수)
+    // -> Map에서 받은 정보들을 key를 이용해 필요한 값들을 하나씩 추출 -> String 타입으로 저장 (멤버필드 변수)
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))              // 사용자 이름 매핑
@@ -53,6 +54,22 @@ public class OAuthAttributes {
                 .id((String) attributes.get(userNameAttributeName)) // 사용자 ID 매핑
                 .attributes(attributes)                             // Map<> 자체 저장
                 .nameAttributeKey(userNameAttributeName)            // 식별 키 저장
-                .build();                                           // 빌더로 객체 생성
+                .build();                                           // 빌더로 객체 생성 (OAuthAttributes)
+    }
+
+    // Naver 로그인 전용 사용자 정보 매핑 메서드
+    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+
+        // Naver는 사용자 정보를 "response" 키 안에 Map으로 감싸서 반환
+        Map<String, Object> response = (Map<String, Object>)attributes.get("response");
+
+        return OAuthAttributes.builder()
+                .name((String) response.get("name"))                // 사용자 이름 추출
+                .email((String) response.get("email"))              // 사용자 이메일 추출
+                .picture((String) response.get("profile_image"))    // 사용자 프로필 사진 추출
+                .id((String) response.get("userNameAttributeName")) // 원본 response Map 저장
+                .attributes(response)                               // 실제 사용자 정보
+                .nameAttributeKey(userNameAttributeName)            // 식별 키 저장
+                .build();                                           // 빌더로 객체 생성 (OAuthAttributes)
     }
 }
