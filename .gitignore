@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Google OAuth2 클라이언트 비밀번호
+application.properties
