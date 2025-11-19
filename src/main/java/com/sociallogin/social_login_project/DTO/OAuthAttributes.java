@@ -11,7 +11,7 @@ public class OAuthAttributes {
     // [멤버 필드]
     private Map<String, Object> attributes; // OAuth로부터 전달받은 사용자 정보 전체 Map
     private String nameAttributeKey;        // OAuth 사용자 식별 키 (Map의 key 부분)
-    private String name;                    // 사용자 이름
+    private String name;                    // 사용자 이름 (카카오에서는 nickname)
     private String email;                   // 사용자 이메일
     private String picture;                 // 사용자 프로필 사진
     private String id;                      // 사용자 고유 ID (Map을 다루기 위한 외부에서 주입된 정보)
@@ -39,7 +39,8 @@ public class OAuthAttributes {
     // OAuthAttributes 객체를 생성하는 정적 팩토리 메서드
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         //return ofGoogle(userNameAttributeName, attributes); // Google 로그인 처리
-        return ofNaver("id", attributes);
+        //return ofNaver("id", attributes);
+        return ofKakao(userNameAttributeName, attributes);
     }
 
     // [메서드]
@@ -71,5 +72,31 @@ public class OAuthAttributes {
                 .attributes(response)                               // 실제 사용자 정보
                 .nameAttributeKey(userNameAttributeName)            // 식별 키 저장
                 .build();                                           // 빌더로 객체 생성 (OAuthAttributes)
+    }
+
+    // Kakao 로그인 전용 사용자 정보 매핑 메서드
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+
+        // userNameAttribute
+        Long id = (Long)attributes.get("id");
+
+        // 로그인한 사용자의 계정 정보 Map
+        Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
+
+        // 프로필 객체에서 이름 및 프로필 이미지 추출
+        Map<String, Object> profile = (Map<String, Object>)kakaoAccount.get("profile");
+        String nickname = (String)profile.get("nickname");                  // 사용자 이름
+        String profileImageUrl = (String)profile.get("profile_image_url");  // 사용자 프로필 사진 URL
+        String email = (String)kakaoAccount.get("email");                   // 사용자 이메일 (현재는 NULL)
+
+        // 사용자 정보로 OAuthAttributes 객체 생성
+        return OAuthAttributes.builder()
+                .name(nickname)                             // 이름 설정
+                .email(email)                               // 이메일 설정
+                .picture(profileImageUrl)                   // 프로필 사진 설정
+                .id("" + id)                                // ID는 문자열로 변환해 저장
+                .attributes(attributes)                     // 전체 원본 데이터 저장
+                .nameAttributeKey(userNameAttributeName)    // 식별 키 생성
+                .build();                                   // 빌더로 객체 생성
     }
 }
