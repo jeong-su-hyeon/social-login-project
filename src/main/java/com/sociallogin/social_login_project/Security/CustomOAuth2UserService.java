@@ -5,6 +5,10 @@ import com.sociallogin.social_login_project.Entity.User;
 import com.sociallogin.social_login_project.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,9 +18,11 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -73,14 +79,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String email = attributes.getEmail();                       // 사용자 이메일
         String picture = attributes.getPicture();                   // 프로필 사진
         String id = attributes.getId();                             // 소셜 서비스 고유 ID
-        String socialType = "kakao";                                // 현재는 Google만 처리
+        String socialType = "github";                               // 현재는 Google만 처리 (google, naver, kakao, github)
 
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 nameAttributeKey = " + nameAttributeKey);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 name = " + name);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 email = " + email);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 picture = " + picture);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 id = " + id);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 socialType = " + socialType);
+        // [Github] 깃허브는 기본 제공 정보에 이메일이 없을 수 있음
+        // -> API 를 통해 수동 조회
+        if(email == null) {
+            log.info("[서비스] CustomOAuth2UserService - loadUser 메서드\nuserRequest.getAccessToken.getTokenValue() = "
+                    + userRequest.getAccessToken().getTokenValue());
+
+            email = getEmailFromGithub(userRequest.getAccessToken().getTokenValue());
+            log.info("[서비스] CustomOAuth2UserService - loadUser 메서드");
+        }
+
+        // 디버깅용 로그
+        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드\n-> nameAttributeKey = " + nameAttributeKey);
+        log.info("\n-> name = " + name);
+        log.info("\n-> email = " + email);
+        log.info("\n-> picture = " + picture);
+        log.info("\n-> id = " + id);
+        log.info("\n-> socialType = " + socialType);
 
 
         // null 방지를 위한 기본값 처리
@@ -123,5 +140,36 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // -> Spring Security의 인증 컨텍스트에 등록 됨
         // 로그인한 사용자의 세션 정보로 사용됨
         // Authentication.getPrincipal을 통해 사용자 정보를 확인할 수 있음
+    }
+
+    // [Github] 깃허브 API를 통해 사용자 이메일 수동 조회 메서드
+    private String getEmailFromGithub(String accessToken) {
+        // 깃허브의 이메일을 조회하는 공식 API 엔트포인트
+        String url = "https://api.github.com/user/emails";
+
+        // Spring에서 외부로 HTTP 요청하기 위한 객체
+        RestTemplate restTemplate = new RestTemplate();
+
+        // API 요청 시 인증 토큰 및 데이터 형식을 정의하는 객체
+        HttpHeaders headers = new HttpHeaders();                    // 요청 헤더 설정
+        headers.set("Authorization", "Bearer " + accessToken);      // 액세스 토큰 설정
+        headers.set("Accept", "application/vnd.github.v3+json");    // 깃허브 API 응답 형식 명시
+
+        // 헤더만 포함된 GET 요청 본문
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // 이메일 정보 요청 (RestTemplate)
+        ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, entity, List.class);
+        List<Map<String, Object>> emails = response.getBody(); // (파싱) HTTP 응답 본문 중 email 목록 데이터 추출
+
+        // 주요 이메일(Primary email) 추출
+        if(emails != null) {
+            for (Map<String, Object> emailData : emails) {
+                if((Boolean) emailData.get("primary")) {
+                    return (String) emailData.get("email");
+                }
+            }
+        }
+        return null; // 이메일을 찾지 못하면 null 반환
     }
 }
