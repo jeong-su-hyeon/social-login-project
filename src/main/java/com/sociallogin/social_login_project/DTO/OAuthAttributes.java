@@ -35,12 +35,13 @@ public class OAuthAttributes {
     }
 
     // [생성자] 팩토리 메서드
-    // 현재는 Google만 처리하며, 추후 다른 플랫폼에 따라 분기 가능
+    // registrationId에 따라 플랫폼에 맞게 분기 가능
     // OAuthAttributes 객체를 생성하는 정적 팩토리 메서드
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         //return ofGoogle(userNameAttributeName, attributes); // Google 로그인 처리
         //return ofNaver("id", attributes);
-        return ofKakao(userNameAttributeName, attributes);
+        //return ofKakao(userNameAttributeName, attributes);
+        return ofGibhub("id", attributes);
     }
 
     // [메서드]
@@ -48,6 +49,8 @@ public class OAuthAttributes {
     // -> Google에서 받은 Map<> 에서 추출된 정보를 담음
     // -> Map에서 받은 정보들을 key를 이용해 필요한 값들을 하나씩 추출 -> String 타입으로 저장 (멤버필드 변수)
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+
+
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))              // 사용자 이름 매핑
                 .email((String) attributes.get("email"))            // 사용자 이메일 매핑
@@ -80,7 +83,7 @@ public class OAuthAttributes {
         // userNameAttribute
         Long id = (Long)attributes.get("id");
 
-        // 로그인한 사용자의 계정 정보 Map
+        // 로그인한 사용자 정보 응답 데이터 파싱 Map
         Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
 
         // 프로필 객체에서 이름 및 프로필 이미지 추출
@@ -98,5 +101,25 @@ public class OAuthAttributes {
                 .attributes(attributes)                     // 전체 원본 데이터 저장
                 .nameAttributeKey(userNameAttributeName)    // 식별 키 생성
                 .build();                                   // 빌더로 객체 생성
+    }
+
+    // Github 로그인 전용 사용자 정보 매핑 메서드
+    private static OAuthAttributes ofGibhub(String userNameAttributeName, Map<String, Object> attributes) {
+
+        // 로그인한 사용자 정보 응답 데이터 파싱 Map
+        String username = (String)attributes.get("login");             // 깃허브 사용자명
+        Integer id = (Integer)attributes.get("id");                    // 깃허브 사용자 고유 ID (깃허브에서 제공)
+        String profileImageUrl = (String)attributes.get("avatar_url"); // 깃허브 프로필 이미지 URL
+        String email = (String)attributes.get("email");
+
+        // 사용자 정보로 OAuthAttributes 객체 생성
+        return OAuthAttributes.builder()
+                .name(username)
+                .email(email)
+                .picture(profileImageUrl)
+                .id("" + id)
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
     }
 }
