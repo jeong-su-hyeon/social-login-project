@@ -2,14 +2,13 @@ package com.sociallogin.social_login_project.Security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 @RequiredArgsConstructor
 // Spring Security에서 사용자 정보를 담는 커스텀 UserDetails 클래스
 // 로그인한 사용자 정보를 Spring Security가 이해할 수 있는 형태로 감싸주는 중간 다리 역할
-public class UserPrincipal implements UserDetails {
+public class CustomUserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     private static final long serialVersionUID = 1L; // 직렬화를 위한 고유 식별자 (예: 세션 저장 or 캐싱 기능)
     private final Long id;
