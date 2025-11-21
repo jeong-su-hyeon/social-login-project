@@ -49,7 +49,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     // OAuth2 로그인 시, 사용자 정보를 불러오고 처리
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 실행"); // 디버깅
+        log.info("\n[서비스] CustomOAuth2UserService - loadUser 메서드 실행"); // 디버깅
 
         // 1 [사용자 정보 조회] 기본 OAuth2UserService를 통해 로그인 된 사용자의 정보를 조회
         // 사용자가 구글, 깃허브 등을 통해 로그인 하면 토큰을 기반으로 사용자 정보가 JSON 형태로 넘어옴
@@ -58,15 +58,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         // 2 [플랫폼 구분] 어떤 플랫폼으로 로그인했는지 구분
-        // OAuth2 서비스 등록 ID (ex. Google, Kakao)
+        // OAuth2 서비스 등록 ID (ex. google, naver, kakao, github)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         // 사용자 식별 키 (ex. sub, id)
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 registrationId = " + registrationId);
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드 userNameAttributeName = " + userNameAttributeName);
+        log.info("\n[서비스] OAuth2 loadUser() registrationId = " + registrationId);
+        log.info("\n[서비스] OAuth2 loadUser() userNameAttributeName = " + userNameAttributeName);
 
 
         // 3 [사용자 정보 매핑] OAuthAttributes 객체로 사용자 정보 매핑
@@ -79,20 +79,41 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String email = attributes.getEmail();                       // 사용자 이메일
         String picture = attributes.getPicture();                   // 프로필 사진
         String id = attributes.getId();                             // 소셜 서비스 고유 ID
-        String socialType = "github";                               // 현재는 Google만 처리 (google, naver, kakao, github)
+        String socialType = registrationId;                         // 소셜 로그인 타입 (google, naver, kakao, github)
 
         // [Github] 깃허브는 기본 제공 정보에 이메일이 없을 수 있음
         // -> API 를 통해 수동 조회
-        if(email == null) {
-            log.info("[서비스] CustomOAuth2UserService - loadUser 메서드\nuserRequest.getAccessToken.getTokenValue() = "
+        if ("github".equals(registrationId) && email == null) {
+            log.info("\n[서비스] OAuth2 loadUser() - 깃허브 액세스 토큰 = "
                     + userRequest.getAccessToken().getTokenValue());
 
             email = getEmailFromGithub(userRequest.getAccessToken().getTokenValue());
-            log.info("[서비스] CustomOAuth2UserService - loadUser 메서드");
+            log.info("\n[서비스] OAuth2 loadUser() - 깃허브 이메일 = " + email);
         }
 
+         // 인증 제공자에 따라 socialType 분기 처리
+//        if ("naver".equals(registrationId)) {           // 네이버
+//            socialType = "naver";
+//        } else if("kakao".equals(registrationId)) {     // 카카오
+//            socialType = "kakao";
+//        } else if ("github".equals(registrationId)) {   // 깃허브
+//            socialType = "github";
+//
+//            // [Github] 깃허브는 기본 제공 정보에 이메일이 없을 수 있음
+//            // -> API 를 통해 수동 조회
+//            if(email == null) {
+//                log.info("\n[서비스] OAuth2 loadUser() - 깃허브 액세스 토큰 = "
+//                        + userRequest.getAccessToken().getTokenValue());
+//
+//                email = getEmailFromGithub(userRequest.getAccessToken().getTokenValue());
+//                log.info("\n[서비스] OAuth2 loadUser() - 깃허브 이메일 = " + email);
+//            }
+//        } else {    // 구글
+//            socialType = "google";
+//        }
+
         // 디버깅용 로그
-        log.info("[서비스] CustomOAuth2UserService - loadUser 메서드\n-> nameAttributeKey = " + nameAttributeKey);
+        log.info("\n[서비스] CustomOAuth2UserService - loadUser 메서드\n-> nameAttributeKey = " + nameAttributeKey);
         log.info("\n-> name = " + name);
         log.info("\n-> email = " + email);
         log.info("\n-> picture = " + picture);
