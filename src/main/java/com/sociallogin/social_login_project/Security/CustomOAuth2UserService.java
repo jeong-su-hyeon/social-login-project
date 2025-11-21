@@ -5,8 +5,8 @@ import com.sociallogin.social_login_project.Entity.User;
 import com.sociallogin.social_login_project.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Slf4j
 @Service
-@RequiredArgsConstructor
 // 소셜 로그인 후, 사용자 정보를 처리하는 커스텀 서비스(로직) 클래스
 // -> 사용자 정보를 가져오고 가공함
 // -> 사용자 정보를 받아와 로그인 및 회원 등록까지 자동화

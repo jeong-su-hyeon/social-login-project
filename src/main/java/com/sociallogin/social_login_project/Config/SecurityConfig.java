@@ -2,6 +2,7 @@ package com.sociallogin.social_login_project.Config;
 
 import com.sociallogin.social_login_project.Handler.LoginFailureHandler;
 import com.sociallogin.social_login_project.Handler.LoginSuccessHandler;
+import com.sociallogin.social_login_project.Security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +16,16 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor    // final로 선언된 필드에 대해 자동으로 생성자를 만들어줌
-@Configuration              // Spring 설정 클래스
+@Configuration              // Spring 설정 클래스 (설정 클래스임을 명시)
 @EnableWebSecurity          // Spring Security 웹 보안 활성화
 // < Spring Security 설정 담당 >
 // (인증, 인가, JWT 필터, OAuth 설정 등)
 public class SecurityConfig {
 
-    // [소셜 로그인 처리 서비스]
-    // 소셜 로그인 시, 이 서비스가 호출되어 사용자 이메일을 읽음
-    // DB에 등록하거나 기존 회원을 불러오는 역할
+    // [로그인 처리 서비스]
+    // 일반 로그인 전용
+    private final CustomUserDetailsService customUserDetailsService;
+    // 소셜 로그인 전용
     private final OAuth2UserService customOAuth2UserService;
 
     // [비밀번호 암호화 처리]
@@ -66,24 +68,25 @@ public class SecurityConfig {
                 .requestMatchers("/todos").authenticated()
                 .anyRequest().authenticated()
         )
-        // 2) 로그인 설정
-//        .formLogin(form -> form
-//                .loginPage("/login")                // 로그인 페이지 경로
-//                .permitAll()                        // 로그인은 인증 없이 접근 가능
-//                .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
-//                .successHandler(authenticationSuccessHandler)     // 로그인 성공 시 핸들러
-//                .failureHandler(authenticationFailureHandler)     // 로그인 실패 시 핸들러
-//        )
-        // 2) OAuth2 로그인 설정
-        .oauth2Login(oauth2 -> oauth2
-            .loginPage("/login")
-            .successHandler(authenticationSuccessHandler)
-            .failureHandler(authenticationFailureHandler)
-            .userInfoEndpoint(userInfo -> userInfo
-                    .userService(customOAuth2UserService))
+        // 2) 일반 로그인 설정
+        .userDetailsService(customUserDetailsService)
+        // 폼 로그인 설정
+        .formLogin(form -> form
+                .loginPage("/login")                // 로그인 페이지 경로
+                .permitAll()                        // 로그인은 인증 없이 접근 가능
+                .defaultSuccessUrl("/todos", true) // 로그인 성공 시 리다이렉트 URL (무조건 todos)
+                .successHandler(authenticationSuccessHandler)     // 로그인 성공 시 핸들러
+                .failureHandler(authenticationFailureHandler)     // 로그인 실패 시 핸들러
         )
-
-        // 3) 로그아웃 설정
+        // 3) OAuth2 로그인 설정
+        .oauth2Login(oauth2 -> oauth2
+            .loginPage("/login")                            // 소셜 로그인도 일반 로그인과 동일한 페이지에서 시작
+            .successHandler(authenticationSuccessHandler)   // 로그인 성공 핸들러
+            .failureHandler(authenticationFailureHandler)   // 로그인 실패 핸들러
+            .userInfoEndpoint(userInfo -> userInfo
+                    .userService(customOAuth2UserService))  // 소셜 로그인 후, 사용자 정보를 어떻게 처리할지 정의 (로그인 or 회원가입)
+        )
+        // 4) 로그아웃 설정
         .logout(logout -> logout
                 .logoutUrl("/logout")               // 로그아웃 페이지 경로
                 .logoutSuccessUrl("/login?logout")  // 로그아웃 성공 시 이동할 URL
