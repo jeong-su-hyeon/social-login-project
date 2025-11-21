@@ -35,13 +35,20 @@ public class OAuthAttributes {
     }
 
     // [생성자] 팩토리 메서드
-    // registrationId에 따라 플랫폼에 맞게 분기 가능
+    // registrationId(google, naver, kakao, github)에 따라 플랫폼에 맞게 분기 가능
     // OAuthAttributes 객체를 생성하는 정적 팩토리 메서드
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
-        //return ofGoogle(userNameAttributeName, attributes); // Google 로그인 처리
-        //return ofNaver("id", attributes);
-        //return ofKakao(userNameAttributeName, attributes);
-        return ofGibhub("id", attributes);
+
+        if ("naver".equals(registrationId)) { // 네이버 로그인 처리
+            return ofNaver("id", attributes);
+        } else if ("kakao".equals(registrationId)) {  // 카카오 로그인 처리
+            return ofKakao("id", attributes);
+        } else if("github".equals(registrationId)) { // 깃허브 로그인 처리
+            return ofGithub("id", attributes);
+        }
+
+        // 구글 로그인 처리 (기본)
+        return ofGoogle(userNameAttributeName, attributes);
     }
 
     // [메서드]
@@ -49,7 +56,6 @@ public class OAuthAttributes {
     // -> Google에서 받은 Map<> 에서 추출된 정보를 담음
     // -> Map에서 받은 정보들을 key를 이용해 필요한 값들을 하나씩 추출 -> String 타입으로 저장 (멤버필드 변수)
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
-
 
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))              // 사용자 이름 매핑
@@ -71,7 +77,7 @@ public class OAuthAttributes {
                 .name((String) response.get("name"))                // 사용자 이름 추출
                 .email((String) response.get("email"))              // 사용자 이메일 추출
                 .picture((String) response.get("profile_image"))    // 사용자 프로필 사진 추출
-                .id((String) response.get("userNameAttributeName")) // 원본 response Map 저장
+                .id((String) response.get(userNameAttributeName)) // 원본 response Map 저장
                 .attributes(response)                               // 실제 사용자 정보
                 .nameAttributeKey(userNameAttributeName)            // 식별 키 저장
                 .build();                                           // 빌더로 객체 생성 (OAuthAttributes)
@@ -104,17 +110,18 @@ public class OAuthAttributes {
     }
 
     // Github 로그인 전용 사용자 정보 매핑 메서드
-    private static OAuthAttributes ofGibhub(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofGithub(String userNameAttributeName, Map<String, Object> attributes) {
 
         // 로그인한 사용자 정보 응답 데이터 파싱 Map
-        String username = (String)attributes.get("login");             // 깃허브 사용자명
+        // 깃허브에는 nickname이 별도로 없으므로 login을 사용
+        String nickname = (String)attributes.get("login");             // 깃허브 사용자명
         Integer id = (Integer)attributes.get("id");                    // 깃허브 사용자 고유 ID (깃허브에서 제공)
         String profileImageUrl = (String)attributes.get("avatar_url"); // 깃허브 프로필 이미지 URL
         String email = (String)attributes.get("email");
 
         // 사용자 정보로 OAuthAttributes 객체 생성
         return OAuthAttributes.builder()
-                .name(username)
+                .name(nickname)
                 .email(email)
                 .picture(profileImageUrl)
                 .id("" + id)
