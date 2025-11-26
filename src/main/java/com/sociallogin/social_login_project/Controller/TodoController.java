@@ -3,6 +3,7 @@ package com.sociallogin.social_login_project.Controller;
 import com.sociallogin.social_login_project.Entity.Todo;
 import com.sociallogin.social_login_project.Entity.User;
 import com.sociallogin.social_login_project.Security.CustomOAuth2User;
+import com.sociallogin.social_login_project.Security.CustomUser;
 import com.sociallogin.social_login_project.Service.TodoService;
 import com.sociallogin.social_login_project.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -60,10 +61,10 @@ public class TodoController {
         }
 
         // (인증 정보 O)
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) principal;   // 사용자 정보를 커스텀 객체로 캐스팅
+        CustomUser customUser = (CustomUser) principal;   // 사용자 정보를 커스텀 객체로 캐스팅
 
         // 2 [사용자 정보를 DB 에서 조회]
-        Optional<User> user = userService.findByEmail(customOAuth2User.getUserName());
+        Optional<User> user = userService.findByEmail(customUser.getUsername());
 
         // (사용자 정보 X)
         if(user.isEmpty()) {

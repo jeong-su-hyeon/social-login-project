@@ -5,6 +5,7 @@ import com.sociallogin.social_login_project.Repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // 로그인 시 사용자 정보를 DB에서 조회하고 검증한 뒤,
     // Spring Security가 이해할 수 있는 형태로 래핑해서 반환하는 역할
     @Override
-    public CustomUserDetails loadUserByUsername(String _email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String _email) throws UsernameNotFoundException {
         log.info("\n[UserPrincipalService] 서비스 - loadUserByUsername 메서드 실행"); // 디버깅
 
         // 0) 사용자 정보 조회 (userName)
@@ -44,8 +45,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 3) 사용자 정보와 권한을 담은 UserPrincipal 객체 생성
         // Spring Security의 인증 컨텍스트에 저장 됨
-        CustomUserDetails customUserDetails = new CustomUserDetails(id, email, password, authorities);
+        CustomUser customUser = new CustomUser(id, email, password, authorities);
 
-        return customUserDetails;
+        return customUser;
     }
 }

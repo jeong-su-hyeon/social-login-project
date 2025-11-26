@@ -157,7 +157,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Long userId = createdUser.getId();
 
         // 커스텀 OAuth2User 객체 반환
-        return new CustomOAuth2User(userId, email, name, authorities, attributes);
+        return new CustomUser(userId, email, authorities, attributes);
         // -> Spring Security의 인증 컨텍스트에 등록 됨
         // 로그인한 사용자의 세션 정보로 사용됨
         // Authentication.getPrincipal을 통해 사용자 정보를 확인할 수 있음
