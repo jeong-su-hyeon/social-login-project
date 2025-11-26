@@ -3,33 +3,52 @@
 
 <br>
 
-### 9월 30일
-1. [섹션 1, 2, 3] 개발 환경 준비 및 Spring Boot 프로젝트 생성
-2. [섹션 4] 일반 로그인 코드 작성 및 **로그인 인증 처리 클래스** 정의
-3. UserService에서 PasswordEncoder를 통해 사용자가 입력한 비밀번호를 DB에 저장할 때 암호화하여 저장하도록 하는 함수를 배움
-4. CustomUserDetails 클래스에서 사용자 정보를 담는 클래스, 즉 로그인한 사용자 정보를 Spring Security가 이해할 수 있는 형태로 감싸주는 코드를 작성함
-5. CustomUserDetailsService에서 로그인 시 사용자 정보를 DB에서 조회하고 검증한 뒤, Spring Security가 이해할 수 있는 형태로 래핑해서 반환하는 코드를 작성함
+### 프로젝트 개요
+- Spring Boot와 Spring Security를 사용해 일반 로그인 및 OAuth2 소셜 로그인을 통합 구현한 백엔드 어플리케이션
+- `Java 21`, `Spring Boot 3.5.6` 등을 사용했으며, 의존성은 다음 이미지와 같다.
+<img width="1061" height="656" alt="image" src="https://github.com/user-attachments/assets/1c846c38-f05f-45f7-a45d-8d728a756867" />
 
-### 10월 1일
-1. [섹션 4] 리스너(이벤트 발생 알아차림)와 핸들러(이벤트 발생 후 다음 동작 메서드)를 통해 로그인 성공 및 실패 시, 어떻게 처리할지에 대한 다음 동작을 구현함
-2. 로그인 실패 시 `CustomLoginFailureHandler` 핸들러가 호출 되며 실패 로그를 남기고, 사용자가 접근하려던 `targetUrl`로 리다이렉트 시킴 (UX 측면에서 중요)
-3. 로그인 성공 시 `CustomLoginSuccessHandler` 핸들러가 호출 되며 성공 로그를 남기고, 로그인 성공 후 이동할 기본 URL로 리다이렉트 시킴
-4. `Config`에서 로그인, 로그아웃, URL 별 접근 권한, 패스워드 암호화 및 핸들러를 등록함
-5. 정리 : 이벤트가 발생하면 리스너가 자동으로 반응하고(`@Component` 어노테이션 사용), `Config`에 등록된 핸들러가 해당 이벤트에 따른 다음 동작을 처리함
+기본 경로 : `http://localhost:8080/` 
 
-### 10월 3일
-1. [섹션 4] 로그인, 로그아웃 등을 처리하는 `HomeController`, 할 일을 관리하는 `TodoController`, 사용자 등록, 로그인을 처리하는 `UserController`를 구현함
 
-### 10월 14일
-1. [섹션 4 19강] resources/templates/ 경로에 시작(`index.html`) / 로그인(`login.html`) / 회원가입(`register.html`) / 할 일 CRUD(`todos.html`) / 할 일 수정(`edit-todo.html`) 페이지 작성 함
+### 데이터베이스 구성
+```
+USE sociallogin_db;
 
-### 10월 15일
-1. Swagger UI에서 REST API를 확인하려면 Controller에서 반환 데이터가 JSON 형식 or 문자열이어야 함. html 페이지는 Swagger UI로 출력할 수 없음 … 다만 @RestController 어노테이션을 사용하면 Swagger UI에서 확인은 가능. 다만 html 페이지로 접속하면 문자열만 반환할 뿐 html 페이지를 보여주지 않음. 결론, 못 쓴 다 ! 내가 원한건 Swagger UI에서 api를 확인만 하는 거신데 … 아무튼 안된답니다
-2. 기본 UI 수정 함 ㅎㅎ 나름 예뻐진듯
-3. 예뻐지면 뭐함 로그인이 안 되는데 당최 왜 안되는 것인지 모르겠다 ㅎ 회원가입은 잘 됐는데 ,,, 가끔 강사님 코드대로 똑같이 실행해도 내꺼만 안되는 사태가 발생해서 제미나이에게 물어물어 가며 원인을 찾아내곤 하는데 ... 버전이 바뀌었나 ... 싶을 때가 종종 있다가도 제미나이 솔루션이 더 설득력 있어서 제미나이가 하자는 대로 따를 때가 더 많다.
-4. 아무튼 회원가입 시 BCrypt 를 사용해 데이터베이스 상에 암호화된 패스워드가 저장되도록 구현해뒀는데, 그 부분까진 잘 진행된 듯 하다. 쩝
-5. 내일 왜 로그인이 안되는지 원인을 다시 찾아봐야겠다. 대충 짐작 가는 점은 회원가입 시 저장된 패스워드...가 암호화 되는 문제가 아닐런지 ... 싶다
+SHOW TABLES;
+SELECT * FROM users;
+SELECT * FROM todos;
+DROP TABLE users;
+DROP TABLE todos;
 
-### 10월 19일
-1. `SecurityConfig`에서 핸들러를 요상하게 호출하고 있었다. 클래스 아래에서 핸들러 함수를 `@Bean`으로 등록한 다음, `securityFilterChain` 메서드에서 매개변수를 통해 전달해 로그인 설정 시 성공, 실패를 전달하도록 설정했어야 하는데... 매개변수에서 전달하는 흐름이 아닌, 함수를 호출하는 흐름으로 작성하고 있었돠 ...ㅎ
-2. 회원가입은 잘 되는데 로그인이 잘 안되는 문제를 드 디 어 알아냈다 ! 이벤트, 핸들러에서 로그인 실패를 자꾸 반환해서 별의 별 디버깅 코드를 다 넣어보았다 ㅎ `UserPrincipalService` 에서 로그인 페이지의 데이터를 어떻게 받아오나 확인을 해봤는데, 빈 값을 받아오고 있었다. 원인은 `login.html`에서 `<input>` 태그의 `name` 속성을 내가 `email`로 바꾼 것이 문제였다. Spring Security는 `username`과 `password`로 이름을 받아오기 때문에 불일치하는 문제가 있었던 것이다. 그것도 모르고 이거 해결하는 데에만 몇 시간을 쓴 것 같다 ㅎ. 고작 이거 하나 해결하는 데 몇 시간 걸린 거에 자책하고 있었지만, 내가 email로 바꾸지 않는 한 모르고 넘어갔을 문제였을 수도 있던 것이니 .. 새로 하나 알게 됐다는 것에 의미를 두기로 했ㄷㅏ.
+CREATE TABLE users (
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    social_type VARCHAR(255),
+    social_id VARCHAR(25)
+);
+
+CREATE TABLE todos (
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    completed BOOL NOT NULL DEFAULT FALSE,    
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) 
+		ON DELETE CASCADE
+);
+```
+
+## 📂 파일 구성
+### `config`
+- `Config` - `SecurityConfig` : Spring Security 설정 담당 (인증, 인가, JWT 필터, OAuth2 설정 등)
+- `Controller` - `HomeController`(로그인, 로그아웃, 메인페이지 접속 처리), `TodoController`(할 일 목록 CRUD), `UserController`(회원가입, 로그인 등)
+- `Service` 
+`DTO`
+`Entity` 
+`Handler` 
+`Repository` 
+`Security`
+
+
