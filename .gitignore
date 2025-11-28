@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### OAuth2 인증 관련 정보 ###
-git rm --cached src/main/resources/application.properties
+src/main/resources/application.properties
