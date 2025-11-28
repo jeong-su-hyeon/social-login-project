@@ -36,11 +36,11 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if(principal == null)
             return "redirect:/login";
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) principal;
+        CustomUser customUser = (CustomUser) principal;
 
         // 2 [사용자의 할 일 추가]
         User user = new User();
-        user.setId(customOAuth2User.getUserId());  // 현재 로그인한 사용자 ID
+        user.setId(customUser.getUserId());  // 현재 로그인한 사용자 ID
         todoService.addTodo(todo, user);    // 추가
 
         // 3 [할 일 목록으로 리다이렉트]
@@ -89,10 +89,10 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if(principal == null)
             return "redirect:/login";
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) principal;   // 사용자 정보를 커스텀 객체로 캐스팅
+        CustomUser customUser = (CustomUser) principal; // 사용자 정보를 커스텀 객체로 캐스팅
 
         // 2 [현재 사용자 할 일 조회]
-        Long userId = customOAuth2User.getUserId(); // 현재 사용자 ID
+        Long userId = customUser.getUserId(); // 현재 사용자 ID
         Optional<Todo> todoOptional = todoService.getTodoById(id); // 해당 사용자의 할 일 조회
 
         // 3 [해당 할 일이 사용자 소유인지 확인]
@@ -116,11 +116,11 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if (principal == null)
             return "redirect:/login";
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) principal;
+        CustomUser customUser = (CustomUser) principal;
 
         // 2 [사용자의 할 일 수정]
         User user = new User();
-        user.setId(customOAuth2User.getUserId()); // 현재 사용자 ID
+        user.setId(customUser.getUserId()); // 현재 사용자 ID
         todoService.updateTodo(id, title, description, user);
 
         return "redirect:/todos";
@@ -133,11 +133,11 @@ public class TodoController {
         Object principal = authentication.getPrincipal();
         if (principal == null)
             return "redirect:/login";
-        CustomOAuth2User customOAuth2User = (CustomOAuth2User) principal;
+        CustomUser customUser = (CustomUser) principal;
 
         // 2 [사용자의 할 일 목록 삭제]
         User user = new User();
-        user.setId(customOAuth2User.getUserId());  // 현재 사용자 ID
+        user.setId(customUser.getUserId());  // 현재 사용자 ID
         todoService.deleteTodoById(id, user);       // 삭제
 
         return "redirect:/todos";
