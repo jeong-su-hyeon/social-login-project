@@ -85,7 +85,7 @@ CREATE TABLE todos (
 
 <br>
 
-## ✅ 일반 로그인 흐름
+## ☘️ 일반 로그인 흐름
 🔗 [일반 로그인 실행 영상](https://drive.google.com/file/d/1a3ivPc1l57IT7k3O9no1CvNTFn9Pv_5Y/view?usp=drive_link)
 
 1. 사용자가 `/login` 경로로 페이지 접속    
@@ -184,7 +184,7 @@ CREATE TABLE todos (
     
 <br>
 
-## ✅ 소셜 로그인 흐름
+## ☘️ 소셜 로그인 흐름
 🔗 [네이버 로그인 실행 영상](https://drive.google.com/file/d/19SvoAknuE2MiX-nv63u2BgtdHfn9efmM/view?usp=drive_link)
 1. 소셜 로그인 버튼 클릭    
     → 사용자가 로그인 버튼을 클릭하면, Spring Security가 자동으로 해당 플랫폼의 인증 페이지로 리디렉션      
@@ -234,7 +234,7 @@ CREATE TABLE todos (
 
 <br>
 
-## ✅ TO-DO App 실행
+## ☘️ TO-DO App 실행
 ### ① 할 일 추가하기
 <img width="2409" height="990" alt="스크린샷 2025-11-28 191318" src="https://github.com/user-attachments/assets/36b30bf6-1146-4a7e-9b1b-ca3b5a9e3aae" />
 
