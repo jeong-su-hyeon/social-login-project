@@ -231,3 +231,22 @@ CREATE TABLE todos (
 5. 인증된 사용자 정보 사용     
     일반 로그인 과정과 동일     
     → 각 소셜 로그인에 필요한 클라이언트 정보는 `application.properties` 에 설정
+
+<br>
+
+## ✅ TO-DO App 실행
+### ① 할 일 추가하기
+<img width="2409" height="990" alt="스크린샷 2025-11-28 191318" src="https://github.com/user-attachments/assets/36b30bf6-1146-4a7e-9b1b-ca3b5a9e3aae" />
+
+### ② 할 일 목록에 추가 됨 
+<img width="2413" height="996" alt="스크린샷 2025-11-28 191336" src="https://github.com/user-attachments/assets/aa998374-d7c0-4590-9998-ca22911799a7" />
+
+### ③ 할일 수정하기 
+<img width="2406" height="992" alt="스크린샷 2025-11-28 191358" src="https://github.com/user-attachments/assets/4da4057d-0f58-4b7a-b129-b8cbb0c3fadf" />
+<img width="2411" height="990" alt="스크린샷 2025-11-28 191413" src="https://github.com/user-attachments/assets/850e897e-1a08-42eb-83e5-30391166cddd" />
+
+### ④ 할 일 삭제하기
+<img width="2413" height="995" alt="스크린샷 2025-11-28 191443" src="https://github.com/user-attachments/assets/674dba8c-1604-4e76-abb3-c2e3675a2a72" />
+
+### ⑤ 할 일 목록에 삭제 됨
+<img width="2409" height="987" alt="스크린샷 2025-11-28 191546" src="https://github.com/user-attachments/assets/2da45bc8-d81b-400e-b3dd-c90c839d33be" />
