@@ -49,21 +49,25 @@ CREATE TABLE todos (
 - `SecurityConfig` : Spring Security 설정 담당 (인증, 인가, JWT 필터, OAuth2 설정 등)
 ### `Controller`
 - HTTP의 요청을 받고 응답을 반환 
-- `HomeController` : 로그인, 로그아웃, 메인페이지 접속 요청
-- `TodoController` : 할 일 목록 CRUD 요청
-- `UserController`: 회원가입, 로그인 등 요청
+- `HomeController` : 로그인, 로그아웃, 메인페이지 접속 요청 처리
+- `UserController`: 회원가입 요청 처리
+  
+  → `UserController`에는 회원 추가 로직만 있고, 로그인 로직이 없다. Spring Securiyt가 인증 과정을 담당하기 때문에 Spring Security가 인증 요청을 가로채서 로그인 인증 과정을 시작한다. `UserController`에서는 단순히 회원 정보를 데이터베이스에 저장하는 가입 로직만 구현되어 있다. 로그인 확인 및 세션 발급 과정은 Spring Security의 몫.
+- `TodoController` : 할 일 목록 CRUD 요청 처리
 ### `Service` 
 - 핵심 비즈니스 로직 처리
-- `TodoService` : 할 일 목록 CRUD 로직 
 - `UserService` : 회원가입, 로그인 로직
+  
+	→ `UserController`에서 회원 추가 로직만 작성했는데, `UserService`에서 `findByEmail`로 회원 조회 메서드를 작성한 이유는 Spring Security가 인증을 완료하기 위함이다. 로그인 처리는 Spring Security가 처리하지만, 인증에 필요한 데이터베이스 상의 회원 정보 비교는 `UserService`를 통해 Spring Security의 `PasswordEncoder`가 처리한다.
+- `TodoService` : 할 일 목록 CRUD 로직 
 ### `Repository`
 - 데이터베이스에 데이터를 저장, 조회, 수정, 삭제하는 CRUD 작업을 수행한다.
-- `TodoRepository` : `findByUserId()` 메서드로 사용자 ID 에해당하는 할 일 목록을 조회한다.
 - `UserRepository` : `findByEmail()` 메서드로 사용자 이름으로 사용자 정보를 조회한다.
+- `TodoRepository` : `findByUserId()` 메서드로 사용자 ID 에해당하는 할 일 목록을 조회한다.
 ### `Entity`
 - 데이터베이스의 테이블을 연결해주는 클래스
-- `Todo` 
 - `User` 
+- `Todo` 
 ### `DTO`
 - `OAuth2Attributes` : 로그인 성공 후 인증 제공자(구글, 네이버, 카카오, 깃허브 등)가 제공하는 사용자 정보를 Map 형태로 전송하고, 해당 정보를 파싱을 통해 우리가 사용할 정보로 바꾸는 과정을 수행한다.
 - 플랫폼마다 반환하는 사용자 정보 JSON의 구조가 다 다르기 때문에 팩토리 메서드 패턴으로 구현하여 로그인 플랫폼에 따라 분기 처리하도록 했다.
@@ -82,6 +86,7 @@ CREATE TABLE todos (
 <br>
 
 ## ✅ 일반 로그인 흐름
+🔗 [일반 로그인 실행 영상](https://drive.google.com/file/d/1a3ivPc1l57IT7k3O9no1CvNTFn9Pv_5Y/view?usp=drive_link)
 
 1. 사용자가 `/login` 경로로 페이지 접속    
     → `HomeController.java` 에서 `login()` 메서드 실행     
@@ -180,6 +185,7 @@ CREATE TABLE todos (
 <br>
 
 ## ✅ 소셜 로그인 흐름
+🔗 [네이버 로그인 실행 영상](https://drive.google.com/file/d/19SvoAknuE2MiX-nv63u2BgtdHfn9efmM/view?usp=drive_link)
 1. 소셜 로그인 버튼 클릭    
     → 사용자가 로그인 버튼을 클릭하면, Spring Security가 자동으로 해당 플랫폼의 인증 페이지로 리디렉션      
     ```html
